@@ -75,6 +75,8 @@ if __name__ == '__main__':
             cv2.putText(img, markers[j].text, markers[j].center, cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
         cv2.imshow("Markers", img)
         cv2.waitKey(1)
+
+        
     cv2.destroyAllWindows()
 
     result = ep_vision.unsub_detect_info(name="marker")

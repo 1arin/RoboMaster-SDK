@@ -16,21 +16,34 @@
 
 import cv2
 from robomaster import robot
+import time
+import matplotlib.pyplot as plt
+import csv
 
 
 if __name__ == '__main__':
     ep_robot = robot.Robot()
-    ep_robot.initialize(conn_type="sta")
+    ep_robot.initialize(conn_type="ap")
 
     ep_camera = ep_robot.camera
 
+    start_time = time.time()
     # 显示200帧图传
     ep_camera.start_video_stream(display=False)
-    for i in range(0, 200):
+    for i in range(0, 500):
         img = ep_camera.read_cv2_image()
-        cv2.imshow("Robot", img)
-        cv2.waitKey(1)
-    cv2.destroyAllWindows()
+    #     cv2.imshow("Robot", img)
+    #     cv2.waitKey(1)
+    # cv2.destroyAllWindows()
+
+    end_time = time.time()
+
+    # Calculate elapsed time
+    elapsed_time = end_time - start_time
+    with open('new_ap_500.csv','w', newline='', encoding='utf-8') as file:    
+        writer = csv.writer(file)
+        writer.writerow([str(elapsed_time)])
+    
     ep_camera.stop_video_stream()
 
     ep_robot.close()
