@@ -24,7 +24,7 @@ if __name__ == '__main__':
     ep_robot = robot.Robot()
 
     # 指定连接方式为STA组网模式
-    ep_robot.initialize(conn_type='sta')
+    ep_robot.initialize(conn_type='ap')
 
     version = ep_robot.get_version()
     print("Robot Version: {0}".format(version))

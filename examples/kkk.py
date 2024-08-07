@@ -35,9 +35,9 @@ if __name__ == '__main__':
     ep_chassis = ep_robot.chassis
     ep_chassis.sub_position(freq=50, callback=subposition_handler)
 
-    speed = 100
+    speed_min = 55
     #PID
-    p = 155.00
+    p = 300.00
     #เริ่มจับเวลา
     start_time = time.time()
     #รอบ
@@ -67,11 +67,11 @@ if __name__ == '__main__':
                     times += 1
                     #รถห่างกับเป้าหมาย 0.2 ให้ 2.5 เพราะ ค่า err น้อยจนล้อไม่ขยับ
                 elif err_abs < 0.2 :
-                    speed = (err*p) * 2.90
+                    speed = (err*p) 
                 #ให้รถขยับ ไปตามค่า speed ที่ได้จาก err
                 ep_chassis.drive_wheels(w1=speed, w2=speed, w3=speed, w4=speed)
     except KeyboardInterrupt:
-        print('Something went wrong')
+        print('End the program')
 
     ep_robot.close()
 

@@ -16,20 +16,50 @@
 
 import robomaster
 from robomaster import robot
-import time
+import time 
+import csv
+import pandas as pd
+import matplotlib.pyplot as plt
 
+
+sub_data = []
 
 def sub_data_handler(sub_info):
     distance = sub_info
     print("tof1:{0}  tof2:{1}  tof3:{2}  tof4:{3}".format(distance[0], distance[1], distance[2], distance[3]))
+    sub_data.append((distance[0], distance[1], distance[2], distance[3]))
 
 
 if __name__ == '__main__':
     ep_robot = robot.Robot()
-    ep_robot.initialize(conn_type="sta")
+    ep_robot.initialize(conn_type="ap")
 
     ep_sensor = ep_robot.sensor
-    ep_sensor.sub_distance(freq=5, callback=sub_data_handler)
-    time.sleep(60)
-    ep_sensor.unsub_distance()
+    ep_chassis = ep_robot.chassis
+    x_val = 0.6
+    y_val = 0.6
+    z_val = 90
+
+    for i in range(3):
+        ep_sensor.sub_distance(freq=1, callback=sub_data_handler)
+        ep_chassis.move(x=x_val, y=0, z=0, xy_speed=0.7).wait_for_completed()
+
+        ep_chassis.move(x=0, y=y_val, z=0, xy_speed=0.7).wait_for_completed()
+        
+        ep_chassis.move(x=-x_val, y=0, z=0, xy_speed=0.7).wait_for_completed()
+
+        ep_chassis.move(x=0, y=-y_val, z=0, xy_speed=0.7).wait_for_completed()
+        ep_sensor.unsub_distance()
     ep_robot.close()
+
+    with open('sub_tof_s2.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["tof0","tof1", "tof2", "tof3"])
+        writer.writerows(sub_data)
+
+df = pd.read_csv('sub_tof_s2.csv')
+plt.plot(df['tof0'])
+plt.xlabel('TIME')
+plt.ylabel('Value')
+plt.title('TOF')
+plt.show()

@@ -27,3 +27,4 @@ if __name__ == '__main__':
     version = ep_robot.get_version()
     print("Robot version: {0}".format(version))
     ep_robot.close()
+
